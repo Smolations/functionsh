@@ -25,3 +25,6 @@ if [ -f "${functionsh_path}/functions/__source_all.sh" ]; then
 
     $functionsh_reload
 fi
+
+
+echo "${B}${COL_MAGENTA}functionsh loaded.${X}"
