@@ -21,8 +21,6 @@ cmd1="source \"${functionsh_path}/functions/__source_all.sh\""
 cmd2="__source_all \"${functionsh_path}/functions\""
 export functionsh_reload="eval ${cmd1} && ${cmd2}"
 if [ -f "${functionsh_path}/functions/__source_all.sh" ]; then
-    # . "${functionsh_path}/functions/__source_all.sh"
-
     $functionsh_reload
 fi
 
