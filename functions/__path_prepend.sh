@@ -1,15 +1,14 @@
 ## /* @function
- #  @usage __path_prepend <path-to-prepend> [<target-path-var>]
+ #  @usage __path_prepend <path> [<target_path_var>]
  #
  #  @output false
  #
  #  @exports
- #  $PATH   - or whatever variable is passed as the second parameter
+ #  $PATH   - or ${<target_path_var>}
  #  exports@
  #
  #  @description
- #  Prepend a path element to $PATH. Second argument is the name of the
- #  path variable to be modified (default: PATH).
+ #  Prepend a <path> element to $PATH by default, or <target_path_var> if given.
  #  description@
  #
  #  @dependencies

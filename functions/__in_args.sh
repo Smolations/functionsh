@@ -1,93 +1,93 @@
 ## /* @function
-#   @usage __in_args <arg_name> "$@"
-#
-#   @output false
-#
-#   @exports
-#   $_arg_val
-#   $_arg_index
-#   $_args_clipped
-#   exports@
-#
-#   @description
-#   Tired of looping through arguments to find the one you want? Say hello to
-#   __in_args. Simply pass name of the option (without any leading hyphens) along
-#   with the "all args" Bash variable ("$@"; make sure it's always wrapped in double
-#   quotes!) and the function will return 0 or 1 if the option is found or isn't
-#   found, respectively. The function will export the $_arg_val variable populated
-#   with the value (if any) associated with the given option (only for GNU-style;
-#   see @notes below).
-#
-#   In addition to the value of the option (if applicable), the function will also
-#   export the $_arg_index variable which holds the 0-based index of where the
-#   argument was found in the argument list.
-#
-#   If further parsing is required, __in_args conveniently exports the original
-#   arguments, sans the passed-in search arg, into the $_args_clipped variable. You
-#   can then pass the exported variable into your next __in_args call.
-#   description@
-#
-#   @notes
-#   - THIS WILL NOT WORK WITH XF86-style long options (e.g. -myoption). Each letter
-#   in the long option will be treated as a POSIX-style single option
-#   (e.g. -m, -y, -o, etc.).
-#   - This function does not look for arguments of POSIX-style single options.
-#   Passing something like "-a /some/path" will not yield "/some/path" in $_arg_val.
-#   If your script requires arguments for options, use a GNU-style long option
-#   (e.g. --option=foo).
-#   - This function is meant to be used in conditionals. Do NOT test for the
-#   existence of the exported variables in your code. The exported variables will
-#   always exist.
-#   notes@
-#
-#   @examples
-#   # assume arguments passed to calling script were:
-#   #   -a --quiet --dry-run=first
-#   __in_args quiet "$@"          # returns 0 (success) matches: --quiet
-#                                 #          $_arg_val =
-#                                 #        $_arg_index = 1
-#                                 #     $_args_clipped = -a  --dry-run=first
-#   __in_args a "$@"              # returns 0 (success) matches: -a
-#                                 #          $_arg_val =
-#                                 #        $_arg_index = 0
-#                                 #     $_args_clipped = --quiet --dry-run=first
-#   __in_args -a "$@"             # returns 2 (failure) should not include hyphen
-#                                 #          $_arg_val =
-#                                 #        $_arg_index =
-#                                 #     $_args_clipped = -a --quiet --dry-run=first
-#   __in_args dry-run "$@"        # returns 0 (success) matches: --dry-run
-#                                 #          $_arg_val = first
-#                                 #        $_arg_index = 2
-#                                 #     $_args_clipped = -a --quiet
-#
-#   # use only in conditionals thusly:
-#   if __in_args "a" "$@"; then
-#       if __in_args "quiet" "$_args_clipped"; then
-#           git add -A . &> /dev/null
-#       else
-#           git add -A .
-#       fi
-#   fi
-#
-#   if __in_args dry-run "$@"; then
-#       runType="$_arg_val"
-#       # ...do something with $runType...
-#   fi
-#   examples@
-#
-#   @dependencies
-#   `sed`
-#   `egrep`
-#   dependencies@
-#
-#   @returns
-#   0 - specified argument found in given input
-#   1 - less than 2 arguments were provided
-#   2 - specified argument not found in given input
-#   returns@
-#
-#   @file __in_args.sh
-## */
+ #  @usage __in_args <arg_name> "$@"
+ #
+ #  @output false
+ #
+ #  @exports
+ #  $_arg_val
+ #  $_arg_index
+ #  $_args_clipped
+ #  exports@
+ #
+ #  @description
+ #  Tired of looping through arguments to find the one you want? Say hello to
+ #  `__in_args`. Simply pass name of the option (without any leading hyphens) along
+ #  with the "all args" Bash variable ("$@"; make sure it's always wrapped in double
+ #  quotes!) and the function will return 0 or 1 if the option is found or isn't
+ #  found, respectively. The function will export the $_arg_val variable populated
+ #  with the value (if any) associated with the given <arg_name> (only for GNU-style;
+ #  see @notes below).
+ #
+ #  In addition to the value of the option (if applicable), the function will also
+ #  export the $_arg_index variable which holds the 0-based index of where the
+ #  argument was found in the argument list.
+ #
+ #  If further parsing is required, `__in_args` conveniently exports the original
+ #  arguments, sans the passed-in search arg, into the $_args_clipped variable. You
+ #  can then pass the exported variable into your next `__in_args` call.
+ #  description@
+ #
+ #  @notes
+ #  - THIS WILL NOT WORK WITH XF86-style long options (e.g. -myoption). Each letter
+ #  in the long option will be treated as a POSIX-style single option
+ #  (e.g. -m, -y, -o, etc.).
+ #  - This function does not look for arguments of POSIX-style single options.
+ #  Passing something like "-a /some/path" will not yield "/some/path" in $_arg_val.
+ #  If your script requires arguments for options, use a GNU-style long option
+ #  (e.g. --option=foo).
+ #  - This function is meant to be used in conditionals. Do NOT test for the
+ #  existence of the exported variables in your code. The exported variables will
+ #  always exist.
+ #  notes@
+ #
+ #  @examples
+ #  # assume arguments passed to calling script were:
+ #  #   -a --quiet --dry-run=first
+ #  __in_args quiet "$@"          # returns 0 (success) matches: --quiet
+ #                                #          $_arg_val =
+ #                                #        $_arg_index = 1
+ #                                #     $_args_clipped = -a  --dry-run=first
+ #  __in_args a "$@"              # returns 0 (success) matches: -a
+ #                                #          $_arg_val =
+ #                                #        $_arg_index = 0
+ #                                #     $_args_clipped = --quiet --dry-run=first
+ #  __in_args -a "$@"             # returns 2 (failure) should not include hyphen
+ #                                #          $_arg_val =
+ #                                #        $_arg_index =
+ #                                #     $_args_clipped = -a --quiet --dry-run=first
+ #  __in_args dry-run "$@"        # returns 0 (success) matches: --dry-run
+ #                                #          $_arg_val = first
+ #                                #        $_arg_index = 2
+ #                                #     $_args_clipped = -a --quiet
+ #
+ #  # use only in conditionals thusly:
+ #  if __in_args "a" "$@"; then
+ #      if __in_args "quiet" "$_args_clipped"; then
+ #          git add -A . &> /dev/null
+ #      else
+ #          git add -A .
+ #      fi
+ #  fi
+ #
+ #  if __in_args dry-run "$@"; then
+ #      runType="$_arg_val"
+ #      # ...do something with $runType...
+ #  fi
+ #  examples@
+ #
+ #  @dependencies
+ #  `sed`
+ #  `egrep`
+ #  dependencies@
+ #
+ #  @returns
+ #  0 - specified argument found in given input
+ #  1 - less than 2 arguments were provided
+ #  2 - specified argument not found in given input
+ #  returns@
+ #
+ #  @file functions/__in_args.sh
+ ## */
 
 function __in_args {
     if [ $# -lt 2 ]; then

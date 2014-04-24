@@ -1,102 +1,102 @@
 ## /* @function
-#   @usage __menu [--prompt=msg] [ [list-item] [list-item] ... ] [-k [list-item] [list-item] ...]
-#
-#   @output true
-#
-#   @exports
-#   $_menu_sel_index
-#   $_menu_sel_value
-#   exports@
-#
-#   @description
-#   Each parameter is considered a list item in the order in which they are passed.
-#   The script stores each parameter and outputs each element as a selectable item
-#   in a menu. By default, a numeric-based list is generated for each list-item.
-#   If you require a second list that has user-specified indexes (non-numeric), you
-#   can pass them using the following format (note the -k option):
-#
-#       __menu -k ":key1:list item description" ":key2:list item description ..."
-#
-#   Each index must be contained within colons. The leading colon is used when
-#   parsing parameters, and to ensure the desired index is what will appear in the
-#   menu. If this leading colon isn't provided, the extra-list may get interpreted
-#   as the menu prompt!
-#
-#   The message for selecting a menu item can be passed as a parameter as well using
-#   the syntax described below.
-#   description@
-#
-#   @options
-#   --prompt=msg    Change the default promp to msg. Be sure to enclose msg in
-#                   double quotes.
-#   -k              Begin the list of key-defined list items. These must come AFTER
-#                   any numeric-based list items, if included.
-#   options@
-#
-#   @notes
-#   - If you wish to pass an array as a parameter, be sure to enclose the variable
-#   name in double quotes. Otherwise, the contents will not get expanded!
-#   - User-specified indexes using the colon-based format are displayed below any
-#   numeric-based list.
-#   - Formatting allows for all keys to be at most 3 characters long.
-#   - For custom prompts, do NOT include a trailing colon. It is added automatically.
-#   notes@
-#
-#   @examples
-#   list="oolah boolah boo"
-#   msg="this is a message"
-#   __menu --prompt="$msg" $list
-#
-#   # output of __menu command (snippet) above would be
-#   # ...
-#   # 1.  oolah
-#   # 2.  boolah
-#   # 3.  boo
-#   # --------------------------------------------
-#   # this is a message:
-#
-#   echo "You selected: ${_menu_sel_index}"
-#
-#   ### ...OR we could add an extra option... ###
-#
-#   __menu $list -k ":N:Show me something new!"
-#
-#   ### Can be effectively used in conditional scripts as well ###
-#
-#   if __menu $list ":N:Show me something new!"; then
-#       case $_menu_sel_index in
-#           1)
-#               ...
-#
-#           ...
-#           # don't forget your custom option!
-#           N) ...;;
-#
-#           # the only other success in this case is if the user pressed enter to abort.
-#           # remember __menu will output "You chose to abort."
-#           *)
-#               echo "Exiting..."; exit 0;;
-#       esac
-#   else
-#       echo "Sorry, your choice was not understood. Exiting..."
-#       exit 1
-#   fi
-#   examples@
-#
-#   @dependencies
-#   `egrep`
-#   __in_array.sh
-#   dependencies@
-#
-#   @returns
-#   0 - function executed successfully
-#   1 - no arguments passed to function
-#   2 - no list items were passed to function
-#   4 - user choice not understood
-#   returns@
-#
-#   @file functions/0300.menu.sh
-## */
+ #  @usage __menu [--prompt=<msg>] <list_item> [<list_item>] ... ] [-k <list_item> [<list_item>] ...]
+ #
+ #  @output true
+ #
+ #  @exports
+ #  $_menu_sel_index
+ #  $_menu_sel_value
+ #  exports@
+ #
+ #  @description
+ #  Each parameter is considered a list item in the order in which they are passed.
+ #  The script stores each parameter and outputs each element as a selectable item
+ #  in a menu. By default, a numeric-based list is generated for each <list_item>.
+ #  If you require a second list that has user-specified indexes (non-numeric), you
+ #  can pass them using the following format (note the -k option):
+ #
+ #      __menu -k ":key1:list item description" ":key2:list item description ..."
+ #
+ #  Each index must be contained within colons. The leading colon is used when
+ #  parsing parameters, and to ensure the desired index is what will appear in the
+ #  menu. If this leading colon isn't provided, the extra-list may get interpreted
+ #  as the menu prompt!
+ #
+ #  The message for selecting a menu item can be passed as a parameter as well using
+ #  the syntax described below.
+ #  description@
+ #
+ #  @options
+ #  --prompt=<msg>  Change the default promp to msg. Be sure to enclose msg in
+ #                  double quotes.
+ #  -k              Begin the list of key-defined list items. These must come AFTER
+ #                  any numeric-based list items, if included.
+ #  options@
+ #
+ #  @notes
+ #  - If you wish to pass an array as a parameter, be sure to enclose the variable
+ #  name in double quotes. Otherwise, the contents will not get expanded!
+ #  - User-specified indexes using the colon-based format are displayed below any
+ #  numeric-based list.
+ #  - Formatting allows for all keys to be at most 3 characters long.
+ #  - For custom prompts, do NOT include a trailing colon. It is added automatically.
+ #  notes@
+ #
+ #  @examples
+ #  list="oolah boolah boo"
+ #  msg="this is a message"
+ #  __menu --prompt="$msg" $list
+ #
+ #  # output of __menu command (snippet) above would be
+ #  # ...
+ #  # 1.  oolah
+ #  # 2.  boolah
+ #  # 3.  boo
+ #  # --------------------------------------------
+ #  # this is a message:
+ #
+ #  echo "You selected: ${_menu_sel_index}"
+ #
+ #  ### ...OR we could add an extra option... ###
+ #
+ #  __menu $list -k ":N:Show me something new!"
+ #
+ #  ### Can be effectively used in conditional scripts as well ###
+ #
+ #  if __menu $list ":N:Show me something new!"; then
+ #      case $_menu_sel_index in
+ #          1)
+ #              ...
+ #
+ #          ...
+ #          # don't forget your custom option!
+ #          N) ...;;
+ #
+ #          # the only other success in this case is if the user pressed enter to abort.
+ #          # remember __menu will output "You chose to abort."
+ #          *)
+ #              echo "Exiting..."; exit 0;;
+ #      esac
+ #  else
+ #      echo "Sorry, your choice was not understood. Exiting..."
+ #      exit 1
+ #  fi
+ #  examples@
+ #
+ #  @dependencies
+ #  `egrep`
+ #  functions/__in_array.sh
+ #  dependencies@
+ #
+ #  @returns
+ #  0 - function executed successfully
+ #  1 - no arguments passed to function
+ #  2 - no list items were passed to function
+ #  4 - user choice not understood
+ #  returns@
+ #
+ #  @file functions/__menu.sh
+ ## */
 
 MENU_HL=${X}${COL_MAGENTA}
 MENU_HEADER=${X}${COL_MAGENTA}
@@ -104,11 +104,11 @@ MENU_INDEX=${X}${B}
 MENU_OPTION=${X}
 MENU_PROMPT=${X}${MENU_HEADER}
 
-# [ -n "$MENU_HL"     ] || export MENU_HL=${X}${COL_BLUE}
-# [ -n "$MENU_HEADER" ] || export MENU_HEADER=${X}${COL_BLUE}
-# [ -n "$MENU_INDEX"  ] || export MENU_INDEX=${X}${B}${COL_YELLOW}
-# [ -n "$MENU_OPTION" ] || export MENU_OPTION=${X}${COL_CYAN}
-# [ -n "$MENU_PROMPT" ] || export MENU_PROMPT=${X}${B}${COL_YELLOW}
+ #[ -n "$MENU_HL"     ] || export MENU_HL=${X}${COL_BLUE}
+ #[ -n "$MENU_HEADER" ] || export MENU_HEADER=${X}${COL_BLUE}
+ #[ -n "$MENU_INDEX"  ] || export MENU_INDEX=${X}${B}${COL_YELLOW}
+ #[ -n "$MENU_OPTION" ] || export MENU_OPTION=${X}${COL_CYAN}
+ #[ -n "$MENU_PROMPT" ] || export MENU_PROMPT=${X}${B}${COL_YELLOW}
 
 function __menu {
     declare -a items extraItems ndxes vals

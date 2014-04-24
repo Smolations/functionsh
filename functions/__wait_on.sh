@@ -1,55 +1,55 @@
 ## /* @function
-#   @usage __wait_on [--max-time=<seconds>] <processID> [<wait_message>]
-#
-#   @output true
-#
-#   @exports
-#   $_exit_status
-#   exports@
-#
-#   @description
-#   This function will present an animated status line while waiting for a given
-#   process ID to complete, and then present the exit status when it is finished.
-#   For convenience, it will export the exit status into a variable for further use
-#   in calling scripts. If a wait message is not provided, a generic message will
-#   be used. The default max wait time is 120 seconds (2 minutes).
-#   description@
-#
-#   @options
-#   --max-time=<seconds>     Integer specifying the maximum number of seconds to
-#                            wait for the given process to complete.
-#   options@
-#
-#   @notes
-#   - The easiest way to use this function is to acquire the process ID after
-#   sending a process the the background, as seen in the example below.
-#   - This function will return a failure exit status if the maximum wait time is
-#   reached or if an invalid process ID (must be an integer) is given.
-#   notes@
-#
-#   @examples
-#   ./some_script.sh &
-#   thePID=$!
-#   if ! __wait_on --max-time=60 $thePID "Running my special script..."; then
-#       ...
-#   fi
-#   examples@
-#
-#   @dependencies
-#   `egrep`
-#   __in_args.sh
-#   dependencies@
-#
-#   @returns
-#   0 - function executed successfully
-#   1 - no arguments passed to function
-#   2 - value of --max-time option is not a number
-#   4 - value of <processID> is invalid
-#   8 - unable to acquire final exit status
-#   returns@
-#
-#   @file __wait_on.sh
-## */
+ #  @usage __wait_on [--max-time=<seconds>] <processID> [<wait_message>]
+ #
+ #  @output true
+ #
+ #  @exports
+ #  $_exit_status
+ #  exports@
+ #
+ #  @description
+ #  This function will present an animated status line while waiting for a given
+ #  <processID> to complete, and then present the exit status when it is finished.
+ #  For convenience, it will export the exit status into a variable for further use
+ #  in calling scripts. If a <wait_message> is not provided, a generic message will
+ #  be used. The default max wait time (--max-time) is 120 seconds (2 minutes).
+ #  description@
+ #
+ #  @options
+ #  --max-time=<seconds>     Integer specifying the maximum number of seconds to
+ #                           wait for the given process to complete.
+ #  options@
+ #
+ #  @notes
+ #  - The easiest way to use this function is to acquire the process ID after
+ #  sending a process the the background, as seen in the example below.
+ #  - This function will return a failure exit status if the maximum wait time is
+ #  reached or if an invalid process ID (must be an integer) is given.
+ #  notes@
+ #
+ #  @examples
+ #  ./some_script.sh &
+ #  thePID=$!
+ #  if ! __wait_on --max-time=60 $thePID "Running my special script..."; then
+ #      ...
+ #  fi
+ #  examples@
+ #
+ #  @dependencies
+ #  `egrep`
+ #  functions/__in_args.sh
+ #  dependencies@
+ #
+ #  @returns
+ #  0 - function executed successfully
+ #  1 - no arguments passed to function
+ #  2 - value of --max-time option is not a number
+ #  4 - value of <processID> is invalid
+ #  8 - unable to acquire final exit status
+ #  returns@
+ #
+ #  @file functions/__wait_on.sh
+ ## */
 
 function __wait_on {
     [ $# == 0 ] && return 1

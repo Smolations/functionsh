@@ -1,52 +1,57 @@
 ## /* @function
-#   @usage __yes_no --default=<y|n> <question_string>
-#
-#   @output true
-#
-#   @exports
-#   $_ans
-#   $_yes
-#   $_no
-#   exports@
-#
-#   @description
-#   This function provides an easy way for presenting yes/no questions and then
-#   using the answer (via exported variables) in script logic.
-#   description@
-#
-#   @options
-#   --default=<y|n>     Set whether the default answer is yes or no. Required.
-#   options@
-#
-#   @examples
-#   # ignore errors
-#   __yes_no --default=n "Does this work"
-#   if [ $_yes ]; then
-#       ...
-#   fi
-#
-#   # OR
-#
-#   # take into account if there is an error during processing within __yes_no
-#   if __yes_no --default=n "Does this work" && [ $_yes ]; then
-#       ...
-#   fi
-#   examples@
-#
-#   @dependencies
-#   `egrep`
-#   __in_args.sh
-#   dependencies@
-#
-#   @returns
-#   0 - successful execution
-#   1 - less than 2 arguments were passed to function
-#   2 - the --default option was not passed to function
-#   4 - an invalid value (or no value) was given for the --default option
-#   returns@
-#
-#   @file __yes_no.sh
-## */
+ #  @usage __yes_no --default=<y|n> <question>
+ #
+ #  @output true
+ #
+ #  @exports
+ #  $_ans
+ #  $_yes
+ #  $_no
+ #  exports@
+ #
+ #  @description
+ #  This function provides an easy way for presenting yes/no questions and then
+ #  using the answer (via exported variables) in script logic.
+ #  description@
+ #
+ #  @options
+ #  --default=<y|n>     Set whether the default answer is yes or no. Required.
+ #  options@
+ #
+ #  @notes
+ #  - A question mark is appended to the <question> by default, so there is no
+ #  need for you to include it.
+ #  notes@
+ #
+ #  @examples
+ #  # ignore errors
+ #  __yes_no --default=n "Does this work"
+ #  if [ $_yes ]; then
+ #      ...
+ #  fi
+ #
+ #  # OR
+ #
+ #  # take into account if there is an error during processing within __yes_no
+ #  if __yes_no --default=n "Does this work" && [ $_yes ]; then
+ #      ...
+ #  fi
+ #  examples@
+ #
+ #  @dependencies
+ #  `egrep`
+ #  functions/__in_args.sh
+ #  dependencies@
+ #
+ #  @returns
+ #  0 - successful execution
+ #  1 - less than 2 arguments were passed to function
+ #  2 - the --default option was not passed to function
+ #  4 - an invalid value (or no value) was given for the --default option
+ #  returns@
+ #
+ #  @file functions/__yes_no.sh
+ ## */
 
 function __yes_no {
     # __debug "__yes_no() $@"
@@ -98,7 +103,8 @@ function __yes_no {
         _ans=$ans
 
     else
-        # this should get triggered when an
+        # this should get triggered when user answers something other than
+        # the allowed characters
         __yes_no --default=$default "$question"
     fi
 

@@ -1,15 +1,14 @@
 ## /* @function
- #  @usage __path_append <path-to-append> [<target-path-var>]
+ #  @usage __path_append <path> [<target_path_var>]
  #
  #  @output false
  #
  #  @exports
- #  $PATH   - or whatever variable is passed as the second parameter
+ #  $PATH   - or ${<target_path_var>}
  #  exports@
  #
  #  @description
- #  Append a path element to $PATH. Second argument is the name of the
- #  path variable to be modified (default: PATH).
+ #  Append a <path> element to $PATH by default, or <target_path_var> if given.
  #  description@
  #
  #  @dependencies

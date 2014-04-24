@@ -1,26 +1,26 @@
 ## /* @function
-#   @usage __str_repeat <string> <num>
-#
-#   @output true
-#
-#   @description
-#   In cases where you need a small number of characters repeated a certain number
-#   of times, this function will solve your problem. It will send <string>
-#   repeated <num> times to STDOUT.
-#   description@
-#
-#   @dependencies
-#   `egrep`
-#   dependencies@
-#
-#   @returns
-#   0 - successful execution
-#   1 - missing or excessive arguments
-#   2 - value passed for <num> is not a number
-#   returns@
-#
-#   @file functions/__str_repeat.sh
-## */
+ #  @usage __str_repeat <string> <num>
+ #
+ #  @output true
+ #
+ #  @description
+ #  In cases where you need a small number of characters repeated a certain number
+ #  of times, this function will solve your problem. It will send the <string>
+ #  repeated <num> times to STDOUT.
+ #  description@
+ #
+ #  @dependencies
+ #  `egrep`
+ #  dependencies@
+ #
+ #  @returns
+ #  0 - successful execution
+ #  1 - missing or excessive arguments
+ #  2 - value passed for <num> is not a number
+ #  returns@
+ #
+ #  @file functions/__str_repeat.sh
+ ## */
 
 function __str_repeat {
     [ $# != 2 ] && return 1

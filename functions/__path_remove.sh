@@ -1,15 +1,14 @@
 ## /* @function
- #  @usage __path_remove <path-to-remove> [<target-path-var>]
+ #  @usage __path_remove <path> [<target_path_var>]
  #
  #  @output false
  #
  #  @exports
- #  $PATH   - or whatever variable is passed as the second parameter
+ #  $PATH   - or ${<target_path_var>}
  #  exports@
  #
  #  @description
- #  Remove a path element from $PATH. Second argument is the name of the
- #  path variable to be modified (default: PATH).
+ #  Remove a <path> element from $PATH by default, or <target_path_var> if given.
  #  description@
  #
  #  @file functions/__path_remove.sh
