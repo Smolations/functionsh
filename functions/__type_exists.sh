@@ -91,8 +91,7 @@ function __type_exists {
         # $retVal needs to be reset
         retVal=0
         # look for system AND user app
-        [ -d "/Applications/${2}.app" ] || [ -d ~/"Applications/${2}.app" ]
-        [ $? == 0 ] && _type_is=app || retVal=4
+        find /Applications ~/Applications -maxdepth 4 -name "${2}.app" >/dev/null && _type_is=app || retVal=4
     fi
 
     # check to see if user specified an option to indicate desired type
