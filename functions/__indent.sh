@@ -66,8 +66,7 @@ function __indent {
     ! egrep --quiet '^[0-9]+$' <<< "$1" && return 2
 
     num=$1 && shift && msg="$@"
-    ind=$( __str_repeat "$chr" $num )
-
-    echo "${ind}${msg}"
+    ind=$( IFS=$'\n'; __str_repeat "$chr" $num )
+    ( IFS=$'\n'; echo "${ind}${msg}" )
 }
 export -f __indent
