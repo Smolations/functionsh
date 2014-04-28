@@ -92,7 +92,7 @@ function __type_exists {
         retVal=0
         # look for system AND user app
         [ -d "/Applications/${2}.app" ] || [ -d ~/"Applications/${2}.app" ]
-        [ $? ] && _type_is=app || retVal=4
+        [ $? == 0 ] && _type_is=app || retVal=4
     fi
 
     # check to see if user specified an option to indicate desired type
