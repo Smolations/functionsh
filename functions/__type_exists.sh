@@ -74,7 +74,7 @@
 function __type_exists {
     [ $# == 0 ] && return 1
 
-    local retVal=0 targ opt=
+    local retVal=0 targ results opt=
     _type_is=
 
     if [ $# -gt 1 ]; then
@@ -91,7 +91,8 @@ function __type_exists {
         # $retVal needs to be reset
         retVal=0
         # look for system AND user app
-        find /Applications ~/Applications -maxdepth 4 -name "${2}.app" >/dev/null && _type_is=app || retVal=4
+        results=$(find /Applications ~/Applications -maxdepth 4 -name "${2}.app")
+        [ -n "$results" ] && _type_is=app || retVal=4
     fi
 
     # check to see if user specified an option to indicate desired type
