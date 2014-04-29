@@ -20,7 +20,7 @@
  ## */
 
 function __elog {
-    __log "[ECHO]  $@"
+    __log "[ECHO]   $@"
     echo "$@"
 }
 export -f __elog
