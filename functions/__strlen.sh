@@ -8,8 +8,9 @@
  #  description@
  #
  #  @notes
- #  - This WILL count newline characters! Keep in mind that echo statements include
- #  a trailing newline character unless the -n option is specified.
+ #  - This WILL count newline characters!
+ #  - Escape sequences for colors are removed before calculating the <string>
+ #  length.
  #  notes@
  #
  #  @examples
@@ -21,6 +22,7 @@
  #  `wc`
  #  `tr`
  #  `egrep`
+ #  functions/__strip_color_codes.sh
  #  dependencies@
  #
  #  @returns
@@ -32,13 +34,14 @@
  ## */
 
 function __strlen {
-    local len retVal=0
+    local len str retVal=0
 
     if [ -z "$@" ]; then
         len=0
 
     else
-        len=$( wc -c <<< "$@" | tr -d '\n\t ' )
+        # str=$( __strip_color_codes "$@" )
+        len=$( __strip_color_codes "$@" | wc -c | tr -d '\n\t ' )
 
         if egrep -q '^\d+$' <<< "$len"; then
             (( len-- ))
