@@ -53,23 +53,25 @@ function __source_all {
                 __source_all "$file"
 
             elif [ -s "$file" ]; then
-                grepped=$( grep '^function' "$file" )
-                # echo "grepped = $grepped"
-
-                if [ -n "$grepped" ]; then
-                    fName="${grepped#* }"
-                    fName="${fName% *}"
-                    # echo "fName = $fName"
-
-                    if egrep -qi '^[-_.a-z0-9]+$' <<< "$fName"; then
-                        eval export -f "$fName"
-                        (( xCount++ ))
-                    fi
-                fi
-
                 # echo "Going to source: ${file}"
                 source "$file"
                 (( sCount++ ))
+
+                if [ $exportFuncs ]; then
+                    grepped=$( grep '^function' "$file" )
+                    # echo "grepped = $grepped"
+
+                    if [ -n "$grepped" ]; then
+                        fName="${grepped#* }"
+                        fName="${fName% *}"
+                        # echo "fName = $fName"
+
+                        if egrep -qi '^[-_.a-z0-9]+$' <<< "$fName"; then
+                            eval export -f "$fName"
+                            (( xCount++ ))
+                        fi
+                    fi
+                fi
             fi
 
         done

@@ -17,9 +17,8 @@ fi
 
 # source main script if it exists, and try to
 # source user script after that
-cmd1="source \"${functionsh_path}/functions/__source_all.sh\""
-cmd2="__source_all \"${functionsh_path}/functions\""
-export functionsh_reload="eval ${cmd1} && ${cmd2}"
+for file in "${functionsh_path}/functions/"*; do source "$file"; done
+export functionsh_reload="__source_all \"${functionsh_path}/functions\""
 if [ -f "${functionsh_path}/functions/__source_all.sh" ]; then
     $functionsh_reload
 fi
