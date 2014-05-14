@@ -1,7 +1,7 @@
 ## /* @function
- #  @usage __source_all [<path>]
+ #  @usage __source_all [-ex] [<path>]
  #
- #  @output false
+ #  @output true (for -e and -x)
  #
  #  @description
  #  This function will source all files in the given <path>, bringing any
@@ -9,6 +9,11 @@
  #  recursively. If no <path> is provided, the current directory is sourced.
  #  Because of this, be very intentional about how you use this function.
  #  description@
+ #
+ #  @options
+ #  -e      Output number of files sourced (e.g. "5 files sourced")
+ #  -x      Output number of functions exported (e.g. "3 functions exported")
+ #  options@
  #
  #  @notes
  #  - The given <path> can be handled whether it ends with a slash (/) or not.
@@ -28,19 +33,43 @@
  ## */
 
 function __source_all {
-    local arg retVal=0
+    local retVal=0 sCount=0 xCount=0 showCount= exportFuncs=
+    local grepped fName arg
 
-    [ $# == 0 ] && arg=$(pwd) || arg="${@%/}"
+    # parse arguments
+    __in_args v "$@" && showCount=true
+    # echo "$_args_clipped"
+    __in_args x $_args_clipped && exportFuncs=true
 
+    [ -z "$_args_clipped" ] && arg=$(pwd) || arg="${_args_clipped%/}"
+    # echo "$showCount | $exportFuncs | $arg"
+
+    # validate directory and start sourcing
     if [ -d "$arg" ]; then
         for file in "${arg}/"*; do
 
             if [ -d "$file" ]; then
+                export count
                 __source_all "$file"
 
             elif [ -s "$file" ]; then
+                grepped=$( grep '^function' "$file" )
+                # echo "grepped = $grepped"
+
+                if [ -n "$grepped" ]; then
+                    fName="${grepped#* }"
+                    fName="${fName% *}"
+                    # echo "fName = $fName"
+
+                    if egrep -qi '^[-_.a-z0-9]+$' <<< "$fName"; then
+                        eval export -f "$fName"
+                        (( xCount++ ))
+                    fi
+                fi
+
                 # echo "Going to source: ${file}"
                 source "$file"
+                (( sCount++ ))
             fi
 
         done
@@ -48,6 +77,9 @@ function __source_all {
     else
         retVal=1
     fi
+
+    [ $showCount ] && echo "${sCount} files sourced" && echo "${xCount} functions exported"
+    unset xCount sCount
 
     return $retVal
 }
