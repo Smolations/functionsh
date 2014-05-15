@@ -49,7 +49,7 @@ function __source_all {
         for file in "${arg}/"*; do
 
             if [ -d "$file" ]; then
-                export count
+                export sCount
                 __source_all "$file"
 
             elif [ -s "$file" ]; then
@@ -66,7 +66,7 @@ function __source_all {
                         fName="${fName% *}"
                         # echo "fName = $fName"
 
-                        if egrep -qi '^[-_.a-z0-9]+$' <<< "$fName"; then
+                        if egrep -qi '^[-_.a-z0-9]+$' <<< "$fName" && __type_exists -f "$fName"; then
                             eval export -f "$fName"
                             (( xCount++ ))
                         fi
