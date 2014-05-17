@@ -1,7 +1,7 @@
 ## /* @function
- #  @usage __source_all [-ex] [<path>]
+ #  @usage __source_all [-vx] [<path>]
  #
- #  @output true (for -e and -x)
+ #  @output true (for -v)
  #
  #  @description
  #  This function will source all files in the given <path>, bringing any
@@ -11,8 +11,8 @@
  #  description@
  #
  #  @options
- #  -e      Output number of files sourced (e.g. "5 files sourced")
- #  -x      Output number of functions exported (e.g. "3 functions exported")
+ #  -x      If the sourced files contains a single function, export each function.
+ #  -v      Output number of functions/files exported (e.g. "3 functions exported").
  #  options@
  #
  #  @notes
