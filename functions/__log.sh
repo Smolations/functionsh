@@ -1,11 +1,11 @@
 ## /* @function
- #  @usage __log [-n] [<data_string> [<data_string> [...]]]
- #  @usage <command> | __log -p [-n]
+ #  @usage __log [-n] [--file=<path>] [<data_string> [<data_string> [...]]]
  #
  #  @output false
  #
  #  @description
- #  Log some information to the file specified by $FUNCTIONSH_LOG_PATH. Using
+ #  Log some information to the file specified by $FUNCTIONSH_LOG_PATH, or by the
+ #  <path> (NOT a folder) supplied by the user using the --file option. Using
  #  a global variable to specify the log file path does not necessarily limit
  #  this function's usefulness. When executing a script (as opposed to sourcing
  #  it), Bash opens a new subprocess. This subprocess can see all of the
@@ -23,59 +23,64 @@
  #      2. When logging is necessary for a script, set the value of
  #         $FUNCTIONSH_LOG_PATH at the top of the script, and write the script
  #         in a manner designed for execution of the script.
+ #      3. If a project requires sourcing scripts instead of executing, create a
+ #         wrapper function around __log and pass it the --file option with the
+ #         project-specific log file. The only downside to this method is that
+ #         piped input will no longer work (unless the user implements it).
  #  description@
  #
  #  @options
- #  -n     Do not prepend a timestamp to the log output. Data will still be logged
- #         with the same indentation as if it had the timestamp.
- #  -p     Tell the function to expect piped input.
+ #  --file=<path>   Path to custom log file. If the doesn't exist, there will be
+ #                  an attempt to create it. The parent directory must exist.
+ #  -n              Do not prepend a timestamp to the log output. Data will still
+ #                  be logged with the same indentation as if it had the timestamp.
  #  options@
  #
  #  @notes
  #  - This function will accept piped input, as seen in the examples below. it does
  #  NOT, however, work well taking piped input from longer-running processes (e.g.):
- #      $ tail -f $file | __log -p
+ #      $ tail -f $file | __log
  #  - The default timestamp as seen in the log has no preceding spaces but
  #  includes 2 trailing spaces (e.g.): [2014-04-12 14:47:40]
  #  notes@
  #
  #  @examples
  #  $ __log "The build cannot be started."
- #  $ git merge master | __log -p
+ #  $ git merge master | __log --file=~/Library/Logs/gitlog.log
  #  examples@
  #
  #  @dependencies
+ #  $FUNCTIONSH_LOG_PATH
  #  `date`
- #  $FUNCTIONSH_LOG_PATH - path to the text file for logging
+ #  functions/__in_args.sh
+ #  functions/__is_stdin.sh
  #  functions/__strip_color_codes.sh
  #  dependencies@
  #
  #  @returns
  #  0 - function executed successfully
- #  1 - $FUNCTIONSH_LOG_PATH is empty
- #  2 - $FUNCTIONSH_LOG_PATH is not a file
+ #  1 - could not determine path to log
+ #  2 - log file could not be created
  #  returns@
  #
  #  @file functions/__log.sh
  ## */
 
 function __log {
-    [ -z "$FUNCTIONSH_LOG_PATH" ] && return 1
-    [ ! -f "$FUNCTIONSH_LOG_PATH" ] && return 2
+    local noStamp data pre log_file="$FUNCTIONSH_LOG_PATH"
 
-    local noStamp piped data pre="[$(date "+%Y-%m-%d %H:%M:%S")]  "
+    __in_args file "$@" && log_file="$_arg_val"
 
-    until [ $# == 0 ]; do
-        case $1 in
-            -n)
-                noStamp=true;;
-            -p)
-                piped=true;;
-            *)
-                [ -z "$data" ] && data="$1" || data="${data} ${1}";;
-        esac
-        shift
-    done
+    [ -z "$log_file" ] && return 1
+    [ ! -f "$log_file" ] && ! touch "$log_file" 2>/dev/null && return 2
+
+    # parse the remaining options
+    __in_args n $_args_clipped && noStamp=true
+    # for backwards compatibility until other projects remove the -p option
+    __in_args p $_args_clipped
+
+    pre="[$(date "+%Y-%m-%d %H:%M:%S")]  "
+    data="$_args_clipped"
 
     if [ $noStamp ]; then
         # this processing ensures that the indentation of the output starts at the
@@ -83,16 +88,15 @@ function __log {
         # not desired, simply set pre="".
         pre=$( printf "%$(wc -c <<< "$pre")s" );
         pre="${pre:1}"
-        shift
     fi
 
-    if [ $piped ]; then
-        while read -t1 datum; do
-            echo -e "${pre}$(__strip_color_codes "$datum")" >> "$FUNCTIONSH_LOG_PATH"
+    if __is_stdin; then
+        cat - | while IFS= read data; do
+            echo -e "${pre}$(__strip_color_codes "$data")" >> "$log_file"
         done
 
     else
-        echo -e "${pre}$(__strip_color_codes "$data")" >> "$FUNCTIONSH_LOG_PATH"
+        echo -e "${pre}$(__strip_color_codes "$data")" >> "$log_file"
     fi
 }
 export -f __log
