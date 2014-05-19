@@ -52,7 +52,6 @@
  #  @dependencies
  #  $FUNCTIONSH_LOG_PATH
  #  `date`
- #  functions/__in_args.sh
  #  functions/__is_stdin.sh
  #  functions/__strip_color_codes.sh
  #  dependencies@
@@ -67,20 +66,29 @@
  ## */
 
 function __log {
-    local noStamp data pre log_file="$FUNCTIONSH_LOG_PATH"
+    local noStamp data pre i log_file="$FUNCTIONSH_LOG_PATH"
 
-    __in_args file "$@" && log_file="$_arg_val"
+    # not using __in_args due to pipe considerations
+    for i in {1..3}; do
+        if [ "$1" == "-n" ]; then
+            noStamp=true
+            shift
+
+        elif grep -q '\-\-file\=' <<< "$1"; then
+            log_file="${1#*=}"
+            shift
+
+        # for backwards compatibility until other projects remove the -p option
+        elif [ "$1" == "-p" ]; then
+            shift
+        fi
+    done
 
     [ -z "$log_file" ] && return 1
     [ ! -f "$log_file" ] && ! touch "$log_file" 2>/dev/null && return 2
 
-    # parse the remaining options
-    __in_args n $_args_clipped && noStamp=true
-    # for backwards compatibility until other projects remove the -p option
-    __in_args p $_args_clipped
-
     pre="[$(date "+%Y-%m-%d %H:%M:%S")]  "
-    data="$_args_clipped"
+    data="$@"
 
     if [ $noStamp ]; then
         # this processing ensures that the indentation of the output starts at the
