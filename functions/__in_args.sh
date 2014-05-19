@@ -98,11 +98,12 @@ function __in_args {
 
     # __debug "__in_args received:  $@"
 
+    local retVal=2 option optionLength allArgs patt ndx sedPatt newArg
+
     # initialize return val/vars
     _arg_val=
     _arg_index=
     _args_clipped=
-    retVal=2
 
     # grab option to search for and shift it off parameter array
     option="$1"
