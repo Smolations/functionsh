@@ -64,6 +64,7 @@ function __source_all {
                     if [ -n "$grepped" ]; then
                         fName="${grepped#* }"
                         fName="${fName% *}"
+                        fName="${fName%(*}"
                         # echo "fName = $fName"
 
                         if egrep -qi '^[-_.a-z0-9]+$' <<< "$fName" && __type_exists -f "$fName"; then
