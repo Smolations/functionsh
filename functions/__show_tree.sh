@@ -29,16 +29,15 @@
  ## */
 
 function __show_tree {
-    local path="${@%/}"
+    local path="${@%/}" indent filePre folderPre
 
     [ -z "$path" ] && path=$(pwd)
 
-    if [ ! -d "$path" ]; then
-        # echo ${E}"  __show_tree: Path given is not a directory.  "${X}
-        return 1
-    fi
+    [ ! -d "$path" ] && return 1
 
-    local indent="$indent    " filePre="" folderPre=""
+    indent="$indent    "
+    filePre=""
+    folderPre=""
 
     if [ ! $inRecurse ]; then
         echo "${COL_YELLOW}$(cd "$path"; pwd)${X}"

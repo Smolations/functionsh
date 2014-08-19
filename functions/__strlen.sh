@@ -34,13 +34,12 @@
  ## */
 
 function __strlen {
-    local len str retVal=0
+    local len retVal=0
 
     if [ -z "$@" ]; then
         len=0
 
     else
-        # str=$( __strip_color_codes "$@" )
         len=$( __strip_color_codes "$@" | wc -c | tr -d '\n\t ' )
 
         if egrep -q '^\d+$' <<< "$len"; then

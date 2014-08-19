@@ -56,10 +56,10 @@
 function __yes_no {
     # __debug "__yes_no() $@"
 
+    local Q="${X}${B}" A="${X}${B}${COL_MAGENTA}" default question optN optY ans
     _ans=
     _yes=
     _no=
-    local default question Q="${X}${B}" A="${X}${B}${COL_MAGENTA}"
 
     # must pass --default option AND question
     if [ $# -lt 2 ]; then
@@ -77,12 +77,9 @@ function __yes_no {
     # set default to be lowercase
     default="${default//N/n}"
     default="${default//Y/y}"
-    # __log "__yes_no(): Default is '$default'"
 
     # validate input
     if [ -z "$default" ] || ! egrep -q '^[yn]$' <<< "$default"; then
-        # echo
-        # __err "__yes_no: You must choose a default answer by passing the --default option!"
         return 4
     fi
 
@@ -117,7 +114,5 @@ function __yes_no {
     fi
 
     export _yes _no _ans
-
-    return 0
 }
 export -f __yes_no

@@ -58,16 +58,14 @@
  ## */
 
 function __in_array {
-    if [ $# -lt 2 ]; then
-        # __log "__in_array: Invalid number of parameters. Given: $@"
-        # echo ${E}"  __in_array requires at least two parameters: needle and haystack, respectively.  "${X}
-        return 1
-    fi
+    [ $# -lt 2 ] && return 1
 
     # use first param as needle and sandwich the rest as the haystack
-    local needle="$1" i=0
     declare -a arr
+    local needle="$1" i
+
     shift
+
     until [ -z "$1" ]; do
         arr[$i]="$1"
         (( i++ ))

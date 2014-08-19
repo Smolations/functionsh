@@ -90,15 +90,11 @@
  ## */
 
 function __in_args {
-    if [ $# -lt 2 ]; then
-        # __err "__in_args expects at least 2 arguments! ${#} given."
-        # __log "    \$@:  ${@}"
-        return 1
-    fi
-
-    # __debug "__in_args received:  $@"
+    [ $# -lt 2 ] && return 1
 
     local retVal=2 option optionLength allArgs patt ndx sedPatt newArg
+
+    # __debug "__in_args received:  $@"
 
     # initialize return val/vars
     _arg_val=
