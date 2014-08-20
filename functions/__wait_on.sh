@@ -54,7 +54,7 @@
 function __wait_on {
     [ $# == 0 ] && return 1
 
-    local maxWait thePID argsMsg indicators i modNum exitMsg waitMsg
+    local maxWait thePID argsMsg indicators i modNum exitMsg waitMsg argsClipped
 
     if __in_args 'max-time' "$@"; then
         if egrep --quiet '^[0-9]+$' <<< "${_arg_val}"; then
@@ -66,9 +66,10 @@ function __wait_on {
         shift
     fi
 
-    # echo "_args_clipped: ${_args_clipped}"
+    argsClipped="${_args_clipped[@]}"
+    # echo "argsClipped = ${argsClipped}"
 
-    thePID="${_args_clipped%% *}"
+    thePID="${argsClipped%% *}"
     waitMsg="Waiting for process ${COL_CYAN}${thePID}${X} to complete..."
 
     if ! egrep --quiet '^[0-9]+$' <<< "$thePID"; then
@@ -76,7 +77,7 @@ function __wait_on {
         return 4
     fi
 
-    argsMsg="${_args_clipped#* }"
+    argsMsg="${argsClipped#* }"
 
     # check for user-supplied wait message...
     egrep -q '[a-zA-Z]' <<< "$argsMsg" && waitMsg="$argsMsg"

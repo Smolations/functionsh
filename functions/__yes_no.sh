@@ -72,7 +72,7 @@ function __yes_no {
     fi
 
     default="$_arg_val"
-    question="$_args_clipped"
+    question="${_args_clipped[@]}"
 
     # set default to be lowercase
     default="${default//N/n}"

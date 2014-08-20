@@ -34,14 +34,15 @@
 
 function __source_all {
     local retVal=0 sCount=0 xCount=0 showCount= exportFuncs=
-    local grepped fName arg
+    local grepped fName arg sPath
 
     # parse arguments
     __in_args v "$@" && showCount=true
     # echo "$_args_clipped"
-    __in_args x $_args_clipped && exportFuncs=true
+    __in_args x "${_args_clipped[@]}" && exportFuncs=true
 
-    [ -z "$_args_clipped" ] && arg=$(pwd) || arg="${_args_clipped%/}"
+    sPath="${_args_clipped[@]}"
+    [ -z "$sPath" ] && arg=$( pwd ) || arg="${sPath%/}"
     # echo "$showCount | $exportFuncs | $arg"
 
     # validate directory and start sourcing
