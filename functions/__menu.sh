@@ -125,18 +125,18 @@ function __menu {
 
     egrep -q ' -k :' <<< "$@" && k=true
     if [ $k ]; then
-        until [ "$1" = "-k" ]; do
+        until [ "$1" == "-k" ]; do
             items[${#items[@]}]="$1"
             shift
         done
         shift
-        until [ -z "$1" ]; do
+        until [ $# == 0 ]; do
             extraItems[${#extraItems[@]}]="$1"
             shift
         done
 
     else
-        until [ -z "$1" ]; do
+        until [ $# == 0 ]; do
             items[${#items[@]}]="$1"
             shift
         done
