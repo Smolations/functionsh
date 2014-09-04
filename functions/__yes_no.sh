@@ -4,7 +4,7 @@
  #  @output true
  #
  #  @exports
- #  $_ans
+ #  $_raw_ans
  #  $_yes
  #  $_no
  #  exports@
@@ -57,7 +57,7 @@ function __yes_no {
     # __debug "__yes_no() $@"
 
     local Q="${X}${B}" A="${X}${B}${COL_MAGENTA}" default question optN optY ans
-    _ans=
+    _raw_ans=
     _yes=
     _no=
 
@@ -92,12 +92,12 @@ function __yes_no {
     # __log "__yes_no(): User answered '$ans'"
     [ -z "$ans" ] && ans=$default
 
-    ans=$(egrep --only-matching '^[ynYN]$' <<< "$ans" 2>/dev/null)
+    ans=$( egrep --only-matching '^[ynYN]$' <<< "$ans" 2>/dev/null )
 
     if [ -n "$ans" ]; then
         ans="${ans//Y/y}"
         ans="${ans//N/n}"
-        _ans=$ans
+        _raw_ans=$ans
 
     else
         # this should get triggered when user answers something other than
@@ -105,14 +105,14 @@ function __yes_no {
         __yes_no --default=$default "$question"
     fi
 
-    # __log "__yes_no(): \$_ans after processing is '${_ans}'"
+    # __log "__yes_no(): \$_raw_ans after processing is '${_raw_ans}'"
 
-    if [ -z "$_ans" ] || [ "$_ans" == "$default" ]; then
+    if [ -z "$_raw_ans" ] || [ "$_raw_ans" == "$default" ]; then
         [ "$default" = "y" ] && _yes=true || _no=true
     else
         [ "$ans" == "y" ] && _yes=true || _no=true
     fi
 
-    export _yes _no _ans
+    export _yes _no _raw_ans
 }
 export -f __yes_no
